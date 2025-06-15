@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfaNET.Identity.Romania", "alfaNET.Identity.Romania\alfaNET.Identity.Romania.csproj", "{97613C50-9354-43AA-B0B4-EF179C2D37FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "alfaNET.Identity.Romania.Tests", "alfaNET.Identity.Romania.Tests\alfaNET.Identity.Romania.Tests.csproj", "{AFC775CF-9DC6-4281-97DA-F95BB92CA0E9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97613C50-9354-43AA-B0B4-EF179C2D37FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97613C50-9354-43AA-B0B4-EF179C2D37FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97613C50-9354-43AA-B0B4-EF179C2D37FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97613C50-9354-43AA-B0B4-EF179C2D37FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFC775CF-9DC6-4281-97DA-F95BB92CA0E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFC775CF-9DC6-4281-97DA-F95BB92CA0E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFC775CF-9DC6-4281-97DA-F95BB92CA0E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFC775CF-9DC6-4281-97DA-F95BB92CA0E9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

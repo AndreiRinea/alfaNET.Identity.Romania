@@ -1,0 +1,50 @@
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.fseventsd
+__MACOSX/
+
+### Rider ###
+.idea/
+*.sln.iml
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf/
+.idea/httpRequests/
+.idea/.localHistory/
+.idea/.rider/
+
+# Rider's user-specific solution configs
+*.DotSettings.user
+
+### .NET / C# ###
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# Logs / database files
+*.log
+*.dbmdl
+
+# Local secrets / config
+*.env
+secrets.json
+
+# VS (if ever opened with Visual Studio)
+.vs/
+
