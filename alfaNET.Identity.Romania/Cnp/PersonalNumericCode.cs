@@ -25,12 +25,12 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
 
     public PersonalNumericCode(long value)
     {
-        if (value < 1000000000000 || value > 9999999999999)
+        if (value is < 1000000000000 or > 9999999999999)
         {
             throw new ArgumentException("invalid value " + value);
         }
         _digits = new byte[13];
-        int i = 12;
+        var i = 12;
         while (value > 0)
         {
             var digit = value % 10;
@@ -42,7 +42,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
 
     public PersonalNumericCode(byte[] digits)
     {
-        if (digits == null) throw new ArgumentNullException();
+        ArgumentNullException.ThrowIfNull(digits);
         if (digits.Length != 13) throw new ArgumentOutOfRangeException(nameof(digits),"value must be 13 digits");
         for (var i = 0; i < 13; i++)
         {
@@ -54,8 +54,8 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
 
     private byte ComputeChecksum()
     {
-        int sum = 0;
-        for (int i = 0; i < 12; i++)
+        var sum = 0;
+        for (var i = 0; i < 12; i++)
         {
             sum += _digits[i] * ValidationConstant[i];
         }
@@ -82,7 +82,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     {
         var countyFirstDigit = _digits[7];
         var countySecondDigit = _digits[8];
-        byte countyCode = (byte)(countyFirstDigit * 10 + countySecondDigit);
+        var countyCode = (byte)(countyFirstDigit * 10 + countySecondDigit);
         return countyCode;
     }
 
@@ -143,7 +143,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             error |= ValidationError.InvalidSequentialNumber;
         }
 
-        if (county == County.BUCURESTI_SECTOR_7 || county == County.BUCURESTI_SECTOR_8)
+        if (county == County.BucurestiSector7 || county == County.BucurestiSector8)
         {
             var date = new DateOnly(year, month, day);
             if (date > MaxDateForSector7And8)
@@ -170,7 +170,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     public override string ToString()
     {
         var result = new StringBuilder(13, 13);
-        for (int i = 0; i < 13; i++)
+        for (var i = 0; i < 13; i++)
         {
             result.Append(_digits[i]);
         }
@@ -181,8 +181,8 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     {
         unchecked // allow overflow
         {
-            int hash = 17;
-            for (int i = 0; i < 13; i++)
+            var hash = 17;
+            for (var i = 0; i < 13; i++)
             {
                 hash = hash * 31 + _digits[i];
             }
@@ -198,8 +198,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     public bool Equals(PersonalNumericCode? other)
     {
         if (ReferenceEquals(this, other)) return true;
-        if (other == null) return false;
-        return _digits.SequenceEqual(other._digits);
+        return other != null && _digits.SequenceEqual(other._digits);
     }
 
     public static bool operator ==(PersonalNumericCode? left, PersonalNumericCode? right) => Equals(left, right);
