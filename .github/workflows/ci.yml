@@ -1,0 +1,54 @@
+name: .NET CI with Code Coverage
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🧰 Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: 📦 Restore dependencies
+        run: dotnet restore
+
+      - name: 🛠️ Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: 🧪 Run tests with coverage
+        run: dotnet test --no-build --configuration Release --collect:"XPlat Code Coverage"
+
+      - name: 📂 Find coverage file
+        id: coverage
+        run: |
+          echo "##[group]Locating coverage file"
+          FILE=$(find . -type f -name 'coverage.cobertura.xml' | head -n 1)
+          echo "file=$FILE" >> $GITHUB_OUTPUT
+          echo "Found: $FILE"
+          echo "##[endgroup]"
+
+      - name: 📊 Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: 🧾 Generate coverage report
+        run: |
+          reportgenerator \
+            -reports:"${{ steps.coverage.outputs.file }}" \
+            -targetdir:"coverage-report" \
+            -reporttypes:Html
+
+      - name: 📤 Upload coverage report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage-report/
