@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Runtime.InteropServices;
 using alfaNET.Identity.Romania.Cnp;
 
 namespace alfaNET.Identity.Romania.Tests.Cnp;
@@ -64,14 +65,16 @@ public class PersonalNumericCodeTest
     public void A_Valid_CNP_IsValidated()
     {
         var validationResult = _validCode1.Validate();
-        Assert.True(validationResult == ValidationError.None);
+        Assert.Equal(ValidationError.None, validationResult);
     }
 
-    [Fact]
-    public void Invalid_CNP_IsNotValidated()
+    [Theory]
+    [InlineData(1800101420011,ValidationError.ChecksumError)]
+    [InlineData(1800101990014,ValidationError.InvalidCounty)]
+    public void Invalid_CNP_IsNotValidated(long cnp, ValidationError expectedError)
     {
-        var bogusCnpValidationResult = new PersonalNumericCode(1800101420011).Validate();
-        Assert.False(bogusCnpValidationResult == ValidationError.None);
+        var actualError = new PersonalNumericCode(cnp).Validate();
+        Assert.Equal(expectedError, actualError);
     }
 
     [Fact]
