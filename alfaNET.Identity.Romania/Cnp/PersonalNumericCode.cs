@@ -21,7 +21,9 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     private static readonly byte[] ValidationConstant = [2, 7, 9, 1, 4, 6, 3, 5, 8, 2, 7, 9];
     private static readonly DateOnly MaxDateForSector7And8 = new(1979, 12, 19);
 
+    #region State
     private readonly byte[] _digits;
+    #endregion
 
     public PersonalNumericCode(long value)
     {
@@ -97,12 +99,12 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             sequentialNumberThirdDigit);
     }
 
-    public ValidationError Validate()
+    public ValidationErrors Validate()
     {
-        var error = ValidationError.None;
+        var errors = ValidationErrors.None;
 
         var sexDigit = _digits[0];
-        if (sexDigit < 1 || sexDigit > 8) error |= ValidationError.InvalidSexDigit;
+        if (sexDigit is < 1 or > 8) errors |= ValidationErrors.InvalidSexDigit;
 
         var monthFirstDigit = _digits[3];
         var monthSecondDigit = _digits[4];
@@ -110,7 +112,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             (monthFirstDigit == 1 && monthSecondDigit > 2) ||
             (monthFirstDigit == 0 && monthSecondDigit == 0))
         {
-            error |= ValidationError.InvalidMonth;
+            errors |= ValidationErrors.InvalidMonth;
         }
 
         var dayFirstDigit = _digits[5];
@@ -119,7 +121,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             (dayFirstDigit == 3 && daySecondDigit > 1) ||
             (dayFirstDigit == 0 && daySecondDigit == 0))
         {
-            error |= ValidationError.InvalidDay;
+            errors |= ValidationErrors.InvalidDay;
         }
 
         var year = GetYearData();
@@ -128,19 +130,19 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
 
         if (day > DateTime.DaysInMonth(year, month))
         {
-            error |= ValidationError.InvalidDate;
+            errors |= ValidationErrors.InvalidDate;
         }
 
         var countyCode = GetCountyCode();
         var county = County.GetByCode(countyCode);
         if (county == null)
         {
-            error |= ValidationError.InvalidCounty;
+            errors |= ValidationErrors.InvalidCounty;
         }
 
         if (GetSequentialNumber() == 0)
         {
-            error |= ValidationError.InvalidSequentialNumber;
+            errors |= ValidationErrors.InvalidSequentialNumber;
         }
 
         if (county == County.BucurestiSector7 || county == County.BucurestiSector8)
@@ -148,7 +150,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             var date = new DateOnly(year, month, day);
             if (date > MaxDateForSector7And8)
             {
-                error |= ValidationError.InvalidDateForCounty;
+                errors |= ValidationErrors.InvalidDateForCounty;
             }
         }
 
@@ -156,15 +158,32 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         var suppliedControlDigit = _digits[12];
         if (suppliedControlDigit != computedControlDigit)
         {
-            error |= ValidationError.ChecksumError;
+            errors |= ValidationErrors.ChecksumError;
         }
 
-        return error;
+        return errors;
     }
 
     public byte[] GetDigits()
     {
         return (byte[])_digits.Clone();
+    }
+
+    public long GetValueAsLong()
+    {
+        return _digits[00] * 1000000000000 +
+               _digits[01] * 100000000000 +
+               _digits[02] * 10000000000 +
+               _digits[03] * 1000000000 +
+               _digits[04] * 100000000 +
+               _digits[05] * 10000000 +
+               _digits[06] * 1000000 +
+               _digits[07] * 100000 +
+               _digits[08] * 10000 +
+               _digits[09] * 1000 +
+               _digits[10] * 100 +
+               _digits[11] * 10 +
+               _digits[12] * 1;
     }
 
     public override string ToString()
@@ -179,7 +198,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
 
     public override int GetHashCode()
     {
-        unchecked // allow overflow
+        unchecked
         {
             var hash = 17;
             for (var i = 0; i < 13; i++)

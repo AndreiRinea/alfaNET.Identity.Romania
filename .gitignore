@@ -48,3 +48,6 @@ secrets.json
 # VS (if ever opened with Visual Studio)
 .vs/
 
+alfaNET.Identity.Romania.Tests/coverage-report/
+alfaNET.Identity.Romania.Tests/TestResults/
+

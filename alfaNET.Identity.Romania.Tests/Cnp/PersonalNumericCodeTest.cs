@@ -12,17 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Runtime.InteropServices;
 using alfaNET.Identity.Romania.Cnp;
 
 namespace alfaNET.Identity.Romania.Tests.Cnp;
 
 public class PersonalNumericCodeTest
 {
-    private readonly PersonalNumericCode _validCode1 = new PersonalNumericCode(1800101420010);
-    private readonly PersonalNumericCode _validCode2 = new PersonalNumericCode(1810101420019);
+    private const long Code1 = 1800101420010;
+    private const long Code2 = 1810101420019;
+    
     private readonly byte[] _code1ByteArray = [1, 8, 0, 0, 1, 0, 1, 4, 2, 0, 0, 1, 0];
-
+    
+    private readonly PersonalNumericCode _validCode1 = new(Code1);
+    private readonly PersonalNumericCode _validCode2 = new(Code2);
+    
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
@@ -65,16 +68,16 @@ public class PersonalNumericCodeTest
     public void A_Valid_CNP_IsValidated()
     {
         var validationResult = _validCode1.Validate();
-        Assert.Equal(ValidationError.None, validationResult);
+        Assert.Equal(ValidationErrors.None, validationResult);
     }
 
     [Theory]
-    [InlineData(1800101420011,ValidationError.ChecksumError)]
-    [InlineData(1800101990014,ValidationError.InvalidCounty)]
-    public void Invalid_CNP_IsNotValidated(long cnp, ValidationError expectedError)
+    [InlineData(1800101420011,ValidationErrors.ChecksumError)]
+    [InlineData(1800101990014,ValidationErrors.InvalidCounty)]
+    public void Invalid_CNP_IsNotValidated(long cnp, ValidationErrors expectedErrors)
     {
         var actualError = new PersonalNumericCode(cnp).Validate();
-        Assert.Equal(expectedError, actualError);
+        Assert.Equal(expectedErrors, actualError);
     }
 
     [Fact]
@@ -122,5 +125,21 @@ public class PersonalNumericCodeTest
     public void Equals_ReturnsFalse_ForDifferentInstance_WhichIsNotEqual()
     {
         Assert.False(_validCode1.Equals(_validCode2));
+    }
+
+    [Fact]
+    public void GetValueAsLong_ReturnsCorrectValue()
+    {
+        var value = _validCode1.GetValueAsLong();
+        Assert.Equal(Code1, value);
+    }
+
+    [Fact]
+    public void Equals_ReturnsTrue_ForDifferentInstances_WithSameValue()
+    {
+        var cnp1 = new PersonalNumericCode(1800101420010);
+        object cnp2 = new PersonalNumericCode(1800101420010);
+        var result = cnp1.Equals(cnp2);
+        Assert.True(result);
     }
 }

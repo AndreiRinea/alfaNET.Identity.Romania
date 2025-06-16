@@ -15,7 +15,7 @@
 namespace alfaNET.Identity.Romania.Cnp;
 
 [Flags]
-public enum ValidationError
+public enum ValidationErrors
 {
     None = 0,
     ChecksumError = 1,
