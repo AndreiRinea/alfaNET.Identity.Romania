@@ -62,6 +62,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             sum += _digits[i] * ValidationConstant[i];
         }
         var controlDigit = sum % 11;
+        controlDigit = controlDigit == 10 ? 1 : controlDigit;
         return (byte)controlDigit;
     }
 
