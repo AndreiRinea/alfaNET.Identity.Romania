@@ -183,4 +183,31 @@ public class PersonalNumericCodeTest
         var errors = cnp.Validate();
         Assert.Equal(ValidationErrors.InvalidMonth, errors);
     }
+    
+    [Theory]
+    [InlineData(1800141420012)]
+    [InlineData(1800132420011)]
+    [InlineData(1800100420018)]
+    public void Validate_Rejects_BadDay(long cnpValue)
+    {
+        var cnp = new PersonalNumericCode(cnpValue);
+        var errors = cnp.Validate();
+        Assert.Equal(ValidationErrors.InvalidDay, errors);
+    }
+
+    [Fact]
+    public void Validate_Rejects_InvalidSequentialNumber()
+    {
+        var personalNumericCode = new PersonalNumericCode(1800101420002);
+        var errors = personalNumericCode.Validate();
+        Assert.Equal(ValidationErrors.InvalidSequentialNumber, errors);
+    }
+
+    [Fact]
+    public void Validate_Rejects_MultipleErrors()
+    {
+        var personalNumericCode = new PersonalNumericCode(1800101990006);
+        var errors = personalNumericCode.Validate();
+        Assert.Equal(ValidationErrors.InvalidSequentialNumber | ValidationErrors.InvalidCounty, errors);
+    }
 }

@@ -18,6 +18,11 @@ namespace alfaNET.Identity.Romania.Cnp;
 
 public class County
 {
+    private const int KnuthMultiplier = unchecked((int)0x9E3779B1);
+
+    public static readonly byte MinCode = 01;
+    public static readonly byte MaxCode = 70;
+    
     private readonly byte _code;
     private readonly string _name;
 
@@ -34,7 +39,11 @@ public class County
 
     public override int GetHashCode()
     {
-        return _code;
+        unchecked
+        {
+            // better spread of values across the Int32 space to prevent clustering in HashTables or similar structures
+            return _code * KnuthMultiplier;
+        }
     }
 
     public override bool Equals(object? obj)

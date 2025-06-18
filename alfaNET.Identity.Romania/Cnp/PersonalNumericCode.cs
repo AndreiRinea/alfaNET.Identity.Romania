@@ -112,6 +112,8 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         var sexDigit = _digits[0];
         if (sexDigit is < 1 or > 8) errors |= ValidationErrors.InvalidSexDigit;
 
+        var hasInvalidDateComponent = false;
+        
         var monthFirstDigit = _digits[3];
         var monthSecondDigit = _digits[4];
         if (monthFirstDigit > 1 ||
@@ -119,6 +121,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             (monthFirstDigit == 0 && monthSecondDigit == 0))
         {
             errors |= ValidationErrors.InvalidMonth;
+            hasInvalidDateComponent = true;
         }
 
         var dayFirstDigit = _digits[5];
@@ -128,13 +131,15 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             (dayFirstDigit == 0 && daySecondDigit == 0))
         {
             errors |= ValidationErrors.InvalidDay;
+            hasInvalidDateComponent = true;
         }
 
         var year = GetYearData();
         var month = _digits[3] * 10 + _digits[4];
         var day = _digits[5] * 10 + _digits[6];
 
-        if (month is >= 1 and <= 12 && 
+        if (!hasInvalidDateComponent &&
+            month is >= 1 and <= 12 && 
             day > DateTime.DaysInMonth(year, month))
         {
             errors |= ValidationErrors.InvalidDate;
