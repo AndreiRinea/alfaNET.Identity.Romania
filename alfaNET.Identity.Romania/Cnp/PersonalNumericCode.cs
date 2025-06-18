@@ -22,7 +22,9 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     private static readonly DateOnly MaxDateForSector7And8 = new(1979, 12, 19);
 
     #region State
+
     private readonly byte[] _digits;
+
     #endregion
 
     public PersonalNumericCode(long value)
@@ -31,6 +33,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         {
             throw new ArgumentException("invalid value " + value);
         }
+
         _digits = new byte[13];
         var i = 12;
         while (value > 0)
@@ -45,12 +48,13 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     public PersonalNumericCode(byte[] digits)
     {
         ArgumentNullException.ThrowIfNull(digits);
-        if (digits.Length != 13) throw new ArgumentOutOfRangeException(nameof(digits),"value must be 13 digits");
+        if (digits.Length != 13) throw new ArgumentOutOfRangeException(nameof(digits), "value must be 13 digits");
         for (var i = 0; i < 13; i++)
         {
             if (digits[i] > 9)
                 throw new ArgumentException("digit at index " + i + " has invalid value of " + digits[i]);
         }
+
         _digits = (byte[])digits.Clone();
     }
 
@@ -61,6 +65,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         {
             sum += _digits[i] * ValidationConstant[i];
         }
+
         var controlDigit = sum % 11;
         controlDigit = controlDigit == 10 ? 1 : controlDigit;
         return (byte)controlDigit;
@@ -129,7 +134,8 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         var month = _digits[3] * 10 + _digits[4];
         var day = _digits[5] * 10 + _digits[6];
 
-        if (day > DateTime.DaysInMonth(year, month))
+        if (month is >= 1 and <= 12 && 
+            day > DateTime.DaysInMonth(year, month))
         {
             errors |= ValidationErrors.InvalidDate;
         }
@@ -194,6 +200,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         {
             result.Append(_digits[i]);
         }
+
         return result.ToString();
     }
 
@@ -206,6 +213,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             {
                 hash = hash * 31 + _digits[i];
             }
+
             return hash;
         }
     }
