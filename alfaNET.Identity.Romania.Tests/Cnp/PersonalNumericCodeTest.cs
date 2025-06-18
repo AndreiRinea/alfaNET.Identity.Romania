@@ -20,12 +20,18 @@ public class PersonalNumericCodeTest
 {
     private const long Code1 = 1800101420010;
     private const long Code2 = 1810101420019;
-    
+    private const long ValidCnpStartingWith3 = 3810326400011;
+    private const long ValidCnpStartingWith4 = 4770521400018;
+    private const long ValidCnpStartingWith5 = 5100521410011;
+    private const long ValidCnpStartingWith6 = 6140913420018;
+    private const long ValidCnpStartingWith7 = 7800101420011;
+    private const long ValidCnpStartingWith8 = 8810101420011;
+
     private readonly byte[] _code1ByteArray = [1, 8, 0, 0, 1, 0, 1, 4, 2, 0, 0, 1, 0];
-    
+
     private readonly PersonalNumericCode _validCode1 = new(Code1);
     private readonly PersonalNumericCode _validCode2 = new(Code2);
-    
+
     [Theory]
     [InlineData(0)]
     [InlineData(-1)]
@@ -65,15 +71,30 @@ public class PersonalNumericCodeTest
     }
 
     [Fact]
-    public void A_Valid_CNP_IsValidated()
+    public void ByteArrayConstructor_ConstructsWell_ForGoodArray()
     {
-        var validationResult = _validCode1.Validate();
-        Assert.Equal(ValidationErrors.None, validationResult);
+        _ = new PersonalNumericCode(_code1ByteArray);
     }
 
     [Theory]
-    [InlineData(1800101420011,ValidationErrors.ChecksumError)]
-    [InlineData(1800101990014,ValidationErrors.InvalidCounty)]
+    [InlineData(Code1)]
+    [InlineData(Code2)]
+    [InlineData(ValidCnpStartingWith3)]
+    [InlineData(ValidCnpStartingWith4)]
+    [InlineData(ValidCnpStartingWith5)]
+    [InlineData(ValidCnpStartingWith6)]
+    [InlineData(ValidCnpStartingWith7)]
+    [InlineData(ValidCnpStartingWith8)]
+    public void Valid_CNPs_AreValidated(long cnpValue)
+    {
+        var personalNumericCode = new PersonalNumericCode(cnpValue);
+        var errors = personalNumericCode.Validate();
+        Assert.Equal(ValidationErrors.None, errors);
+    }
+
+    [Theory]
+    [InlineData(1800101420011, ValidationErrors.ChecksumError)]
+    [InlineData(1800101990014, ValidationErrors.InvalidCounty)]
     public void Invalid_CNP_IsNotValidated(long cnp, ValidationErrors expectedErrors)
     {
         var actualError = new PersonalNumericCode(cnp).Validate();
@@ -141,5 +162,25 @@ public class PersonalNumericCodeTest
         object cnp2 = new PersonalNumericCode(1800101420010);
         var result = cnp1.Equals(cnp2);
         Assert.True(result);
+    }
+
+    [Fact]
+    public void OpEquals_ReturnsTrue_ForDifferentInstances_WithSameValue()
+    {
+        var cnp1 = new PersonalNumericCode(1800101420010);
+        var cnp2 = new PersonalNumericCode(1800101420010);
+        var result = cnp1 == cnp2;
+        Assert.True(result);
+    }
+
+    [Theory]
+    [InlineData(1802001400014)]
+    [InlineData(1801301400014)]
+    [InlineData(1800001400012)]
+    public void Validate_Rejects_BadMonth(long cnpValue)
+    {
+        var cnp = new PersonalNumericCode(cnpValue);
+        var errors = cnp.Validate();
+        Assert.Equal(ValidationErrors.InvalidMonth, errors);
     }
 }
