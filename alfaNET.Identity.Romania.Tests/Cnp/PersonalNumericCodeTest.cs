@@ -210,4 +210,16 @@ public class PersonalNumericCodeTest
         var errors = personalNumericCode.Validate();
         Assert.Equal(ValidationErrors.InvalidSequentialNumber | ValidationErrors.InvalidCounty, errors);
     }
+
+    [Theory]
+    [InlineData("0800101420019")]
+    [InlineData("9800101420015")]
+    public void Validate_Rejects_InvalidSexDigit(string cnpValue)
+    {
+        var charArray = cnpValue.ToCharArray();
+        var byteArray = charArray.Select(c=>byte.Parse(c.ToString())).ToArray();
+        var personalNumericCode = new PersonalNumericCode(byteArray);
+        var errors = personalNumericCode.Validate();
+        Assert.Equal(ValidationErrors.InvalidSexDigit, errors);
+    }
 }
