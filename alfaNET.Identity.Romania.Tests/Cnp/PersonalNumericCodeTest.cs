@@ -240,4 +240,12 @@ public class PersonalNumericCodeTest
         var errors = cnp.Validate();
         Assert.Equal(ValidationErrors.InvalidDateForCounty, errors);
     }
+    
+    [Fact]
+    public void Validate_Rejects_InvalidDate_EvenWhenBadForCounty()
+    {
+        var personalNumericCode = new PersonalNumericCode(1800230470014);
+        var errors = personalNumericCode.Validate();
+        Assert.Equal(ValidationErrors.InvalidDate, errors);
+    }
 }

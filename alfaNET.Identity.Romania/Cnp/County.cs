@@ -14,13 +14,27 @@
 
 // ReSharper disable MemberCanBePrivate.Global
 // ReSharper disable IdentifierTypo
+// ReSharper disable ConvertToConstant.Global
 namespace alfaNET.Identity.Romania.Cnp;
 
+/// <summary>
+/// Enumeration of all counties used in a Personal Numeric Code (CNP) of Romania
+/// </summary>
 public class County
 {
+    /// <summary>
+    /// To prevent clustering we will be using Donald Knuth's constant to disperse the values across the Int32 space
+    /// </summary>
     private const int KnuthMultiplier = unchecked((int)0x9E3779B1);
 
+    /// <summary>
+    /// The lowest valid county numerical ID
+    /// </summary>
     public static readonly byte MinCode = 01;
+    
+    /// <summary>
+    /// The highest valid county numerical ID
+    /// </summary>
     public static readonly byte MaxCode = 70;
     
     private readonly byte _code;
@@ -32,11 +46,13 @@ public class County
         _name = name;
     }
 
+    /// <inheritdoc />
     public override string ToString()
     {
         return _name;
     }
 
+    /// <inheritdoc />
     public override int GetHashCode()
     {
         unchecked
@@ -46,6 +62,7 @@ public class County
         }
     }
 
+    /// <inheritdoc />
     public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj))
@@ -62,6 +79,10 @@ public class County
     public static bool operator ==(County? left, County? right) => Equals(left, right);
     public static bool operator !=(County? left, County? right) => !Equals(left, right);
     
+    /// <summary>
+    /// An enumeration of all available counties
+    /// </summary>
+    /// <returns>An array presented as an IEnumerable</returns>
     public static IEnumerable<County> List() => [
         Alba,
         Arad,
@@ -116,6 +137,11 @@ public class County
         CodUnic
      ];
 
+    /// <summary>
+    /// Obtains a county by the numerical ID
+    /// </summary>
+    /// <param name="code">the numerical ID of the county</param>
+    /// <returns>The matching county or null if no counties match the ID</returns>
     public static County? GetByCode(byte code)
     {
         switch (code)
