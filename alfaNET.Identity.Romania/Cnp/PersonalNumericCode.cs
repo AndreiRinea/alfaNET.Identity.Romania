@@ -48,11 +48,16 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     public PersonalNumericCode(byte[] digits)
     {
         ArgumentNullException.ThrowIfNull(digits);
-        if (digits.Length != 13) throw new ArgumentOutOfRangeException(nameof(digits), "value must be 13 digits");
+        if (digits.Length != 13)
+        {
+            throw new ArgumentOutOfRangeException(nameof(digits), "value must be 13 digits");
+        }
         for (var i = 0; i < 13; i++)
         {
             if (digits[i] > 9)
+            {
                 throw new ArgumentException("digit at index " + i + " has invalid value of " + digits[i]);
+            }
         }
 
         _digits = (byte[])digits.Clone();
@@ -110,7 +115,10 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         var errors = ValidationErrors.None;
 
         var sexDigit = _digits[0];
-        if (sexDigit is < 1 or > 8) errors |= ValidationErrors.InvalidSexDigit;
+        if (sexDigit is < 1 or > 8)
+        {
+            errors |= ValidationErrors.InvalidSexDigit;
+        }
 
         var hasInvalidDateComponent = false;
         
@@ -157,7 +165,8 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             errors |= ValidationErrors.InvalidSequentialNumber;
         }
 
-        if (county == County.BucurestiSector7 || county == County.BucurestiSector8)
+        if (county == County.BucurestiSector7 ||
+            county == County.BucurestiSector8)
         {
             var date = new DateOnly(year, month, day);
             if (date > MaxDateForSector7And8)
@@ -218,7 +227,6 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             {
                 hash = hash * 31 + _digits[i];
             }
-
             return hash;
         }
     }
@@ -231,7 +239,8 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
     public bool Equals(PersonalNumericCode? other)
     {
         if (ReferenceEquals(this, other)) return true;
-        return other != null && _digits.SequenceEqual(other._digits);
+        return other != null && 
+               _digits.SequenceEqual(other._digits);
     }
 
     public static bool operator ==(PersonalNumericCode? left, PersonalNumericCode? right) => Equals(left, right);

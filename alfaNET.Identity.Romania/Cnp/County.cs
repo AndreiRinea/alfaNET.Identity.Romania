@@ -48,8 +48,14 @@ public class County
 
     public override bool Equals(object? obj)
     {
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj is not County other) return false;
+        if (ReferenceEquals(this, obj))
+        {
+            return true;
+        }
+        if (obj is not County other)
+        {
+            return false;
+        }
         return _code == other._code;
     }
     
