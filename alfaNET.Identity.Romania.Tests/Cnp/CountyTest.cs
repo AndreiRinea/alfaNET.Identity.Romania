@@ -58,4 +58,22 @@ public class CountyTest
         }
         Assert.Equal(County.List().Count(),  counties.Count);
     }
+
+    [Fact]
+    public void Equals_ReturnTrue_ForExactSameInstance()
+    {
+        var county = County.Cluj;
+        // ReSharper disable once EqualExpressionComparison
+        var result = county.Equals(county);
+        Assert.True(result);
+    }
+
+    [Fact]
+    public void Equals_ReturnsFalse_ForDifferentClass()
+    {
+        var county = County.Cluj;
+        var other = new object();
+        var result = county.Equals(other);
+        Assert.False(result);
+    }
 }
