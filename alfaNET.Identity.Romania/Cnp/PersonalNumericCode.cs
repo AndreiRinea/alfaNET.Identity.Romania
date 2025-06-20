@@ -115,7 +115,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         return countyCode;
     }
 
-    private short GetSequentialNumber()
+    private short GetSequentialNumberData()
     {
         var sequentialNumberFirstDigit = _digits[9];
         var sequentialNumberSecondDigit = _digits[10];
@@ -140,7 +140,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             1 or 2 => 1900,
             3 or 4 => 1800,
             5 or 6 => 2000,
-            _ => 0,
+            _ => 0
         };
         year += (short)(_digits[1] * 10);
         year += _digits[2];
@@ -198,7 +198,7 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
             errors |= ValidationErrors.InvalidCounty;
         }
 
-        if (GetSequentialNumber() == 0)
+        if (GetSequentialNumberData() == 0)
         {
             errors |= ValidationErrors.InvalidSequentialNumber;
         }
@@ -259,6 +259,28 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         }
 
         return new DateTime(dateComponents.Year, dateComponents.Month, dateComponents.Day);
+    }
+
+    public County GetCounty()
+    {
+        var countyCode = GetCountyCode();
+        var county = County.GetByCode(countyCode);
+        if (county == null)
+        {
+            throw new InvalidOperationException("PersonalNumericCode has invalid county code: " + countyCode);
+        }
+        return county;
+    }
+
+    public short GetSequentialNumber()
+    {
+        var sequentialNumberData = GetSequentialNumberData();
+        if (sequentialNumberData == 0)
+        {
+            throw new InvalidOperationException("PersonalNumericCode has invalid sequential number" +
+                                                sequentialNumberData);
+        }
+        return sequentialNumberData;
     }
 
     /// <summary>

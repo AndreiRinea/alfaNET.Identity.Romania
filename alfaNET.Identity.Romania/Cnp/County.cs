@@ -144,61 +144,61 @@ public class County
     /// <returns>The matching county or null if no counties match the ID</returns>
     public static County? GetByCode(byte code)
     {
-        switch (code)
+        return code switch
         {
-            case 01: return Alba;
-            case 02: return Arad;
-            case 03: return Arges;
-            case 04: return Bacau;
-            case 05: return Bihor;
-            case 06: return BistritaNasaud;
-            case 07: return Botosani;
-            case 08: return Brasov;
-            case 09: return Braila;
-            case 10: return Buzau;
-            case 11: return CarasSeverin;
-            case 12: return Cluj;
-            case 13: return Constanta;
-            case 14: return Covasna;
-            case 15: return Dambovita;
-            case 16: return Dolj;
-            case 17: return Galati;
-            case 18: return Gorj;
-            case 19: return Harghita;
-            case 20: return Hunedoara;
-            case 21: return Ialomita;
-            case 22: return Iasi;
-            case 23: return Ilfov;
-            case 24: return Maramures;
-            case 25: return Mehedinti;
-            case 26: return Mures;
-            case 27: return Neamt;
-            case 28: return Olt;
-            case 29: return Prahova;
-            case 30: return SatuMare;
-            case 31: return Salaj;
-            case 32: return Sibiu;
-            case 33: return Suceava;
-            case 34: return Teleorman;
-            case 35: return Timis;
-            case 36: return Tulcea;
-            case 37: return Vaslui;
-            case 38: return Valcea;
-            case 39: return Vrancea;
-            case 40: return Bucuresti;
-            case 41: return BucurestiSector1;
-            case 42: return BucurestiSector2;
-            case 43: return BucurestiSector3;
-            case 44: return BucurestiSector4;
-            case 45: return BucurestiSector5;
-            case 46: return BucurestiSector6;
-            case 47: return BucurestiSector7;
-            case 48: return BucurestiSector8;
-            case 51: return Calarasi;
-            case 52: return Giurgiu;
-            case 70: return CodUnic;
-            default: return null;
-        }
+            01 => Alba,
+            02 => Arad,
+            03 => Arges,
+            04 => Bacau,
+            05 => Bihor,
+            06 => BistritaNasaud,
+            07 => Botosani,
+            08 => Brasov,
+            09 => Braila,
+            10 => Buzau,
+            11 => CarasSeverin,
+            12 => Cluj,
+            13 => Constanta,
+            14 => Covasna,
+            15 => Dambovita,
+            16 => Dolj,
+            17 => Galati,
+            18 => Gorj,
+            19 => Harghita,
+            20 => Hunedoara,
+            21 => Ialomita,
+            22 => Iasi,
+            23 => Ilfov,
+            24 => Maramures,
+            25 => Mehedinti,
+            26 => Mures,
+            27 => Neamt,
+            28 => Olt,
+            29 => Prahova,
+            30 => SatuMare,
+            31 => Salaj,
+            32 => Sibiu,
+            33 => Suceava,
+            34 => Teleorman,
+            35 => Timis,
+            36 => Tulcea,
+            37 => Vaslui,
+            38 => Valcea,
+            39 => Vrancea,
+            40 => Bucuresti,
+            41 => BucurestiSector1,
+            42 => BucurestiSector2,
+            43 => BucurestiSector3,
+            44 => BucurestiSector4,
+            45 => BucurestiSector5,
+            46 => BucurestiSector6,
+            47 => BucurestiSector7,
+            48 => BucurestiSector8,
+            51 => Calarasi,
+            52 => Giurgiu,
+            70 => CodUnic,
+            _ => null
+        };
     }
     
     public static readonly County Alba = new(01, "Alba");
