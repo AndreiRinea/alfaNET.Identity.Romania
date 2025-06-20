@@ -222,4 +222,22 @@ public class PersonalNumericCodeTest
         var errors = personalNumericCode.Validate();
         Assert.Equal(ValidationErrors.InvalidSexDigit, errors);
     }
+
+    [Fact]
+    public void Validate_Rejects_InvalidDateWithValidComponents()
+    {
+        var personalNumericCode = new PersonalNumericCode(1790229420014);
+        var errors = personalNumericCode.Validate();
+        Assert.Equal(ValidationErrors.InvalidDate, errors);
+    }
+
+    [Theory]
+    [InlineData(1800101470017)]
+    [InlineData(1800101480014)]
+    public void Validate_Rejects_InvalidDateForCounty(long cnpValue)
+    {
+        var cnp = new PersonalNumericCode(cnpValue);
+        var errors = cnp.Validate();
+        Assert.Equal(ValidationErrors.InvalidDateForCounty, errors);
+    }
 }
