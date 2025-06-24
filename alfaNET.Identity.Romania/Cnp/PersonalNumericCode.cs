@@ -249,6 +249,11 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         return _digits[0] % 2 == 1 ? Sex.Male : Sex.Female;
     }
 
+    /// <summary>
+    /// Gets the calendar date associated with the current Personal Numeric Code.
+    /// </summary>
+    /// <returns>A DateTime for the date of the Personal Numeric Code</returns>
+    /// <exception cref="InvalidOperationException">The current Personal Numeric Code has not a valid date.</exception>
     public DateTime GetDate()
     {
         var dateComponents = GetDateComponents();
@@ -261,6 +266,13 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         return new DateTime(dateComponents.Year, dateComponents.Month, dateComponents.Day);
     }
 
+    /// <summary>
+    /// Gets the county associated with the current Personal Numeric Code.
+    /// See <see cref="alfaNET.Identity.Romania.Cnp.County"/>
+    /// </summary>
+    /// <returns>An instance of County associated with the current Personal Numeric Code</returns>
+    /// <exception cref="InvalidOperationException">The current Personal Numeric Code has not a valid county
+    /// code</exception>
     public County GetCounty()
     {
         var countyCode = GetCountyCode();
@@ -272,6 +284,12 @@ public class PersonalNumericCode : IEquatable<PersonalNumericCode>
         return county;
     }
 
+    /// <summary>
+    /// Gets the sequential number within the current Personal Numeric Code. This has valid values within 001 to 999.
+    /// </summary>
+    /// <returns>An Int16 containing the sequential number within the Personal Numeric Code</returns>
+    /// <exception cref="InvalidOperationException">The current Personal Numeric Code has not a valid sequential
+    /// number</exception>
     public short GetSequentialNumber()
     {
         var sequentialNumberData = GetSequentialNumberData();

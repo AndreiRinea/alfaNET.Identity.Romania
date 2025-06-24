@@ -14,6 +14,9 @@
 
 namespace alfaNET.Identity.Romania.Cnp;
 
+/// <summary>
+/// The sex of the person to whom the Personal Numeric Code belongs
+/// </summary>
 public enum Sex
 {
     Male,
