@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace alfaNET.Identity.Romania.Cnp;
-
-/// <summary>
-/// The sex of the person to whom the Personal Numeric Code belongs
-/// </summary>
-public enum Sex
+namespace alfaNET.Identity.Romania.Cnp
 {
-    Male,
-    Female
+    /// <summary>
+    /// The sex of the person to whom the Personal Numeric Code belongs
+    /// </summary>
+    public enum Sex
+    {
+        Male,
+        Female
+    }
 }
