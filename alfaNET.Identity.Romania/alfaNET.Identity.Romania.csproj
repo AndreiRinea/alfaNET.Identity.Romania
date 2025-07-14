@@ -8,7 +8,13 @@
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>https://github.com/AndreiRinea/alfaNET.Identity.Romania.git</PackageProjectUrl>
         <RepositoryUrl>https://github.com/AndreiRinea/alfaNET.Identity.Romania.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
         <Authors>Andrei Rinea</Authors>
+        <Version>1.0.0</Version>
+        <Description>
+            A small library for validating and extracting data from Romanian Personal Numeric Codes (CNPs).
+        </Description>
+        <PackageTags>CNP;identity;Romania;PNC</PackageTags>
     </PropertyGroup>
 
 </Project>
