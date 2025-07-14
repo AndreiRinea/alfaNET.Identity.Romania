@@ -31,6 +31,10 @@ public class PersonalNumericCodeTest
     private const long CnpWithInvalidDate1 = 1800231420002;
     private const long CnpWithInvalidDate2 = 5250229420009;
 
+    private const long CnpWithInvalidCounty1 = 1800101990006;
+
+    private const long CnpWithInvalidSequentialNumber = 1800101420002;
+
     private readonly byte[] _code1ByteArray = [1, 8, 0, 0, 1, 0, 1, 4, 2, 0, 0, 1, 0];
 
     private readonly PersonalNumericCode _validCode1 = new(Code1);
@@ -276,10 +280,7 @@ public class PersonalNumericCodeTest
     public void GetDate_RejectsCall_WhenObjectStateInvalid(long cnpValue)
     {
         var personalNumericCode = new PersonalNumericCode(cnpValue);
-        Assert.Throws<InvalidOperationException>(() =>
-        {
-            _ = personalNumericCode.GetDate();
-        });
+        Assert.Throws<InvalidOperationException>(() => { _ = personalNumericCode.GetDate(); });
     }
 
     [Theory]
@@ -290,5 +291,40 @@ public class PersonalNumericCodeTest
         var personalNumericCode = new PersonalNumericCode(cnpValue);
         var actualDate = personalNumericCode.GetDate();
         Assert.Equal(expectedDate, actualDate);
+    }
+
+    [Theory]
+    [InlineData(ValidCnpStartingWith3, 40)]
+    [InlineData(ValidCnpStartingWith5, 41)]
+    public void GetCounty_ReturnsCorrectValue(long cnpValue, byte countyCode)
+    {
+        var personalNumericCode = new PersonalNumericCode(cnpValue);
+        var actualCounty = personalNumericCode.GetCounty();
+        var expectedCounty = County.GetByCode(countyCode);
+        Assert.Equal(expectedCounty, actualCounty);
+    }
+
+    [Fact]
+    public void GetCounty_RejectsCall_WhenObjectStateInvalid()
+    {
+        var personalNumericCode = new PersonalNumericCode(CnpWithInvalidCounty1);
+        Assert.Throws<InvalidOperationException>(() => { _ = personalNumericCode.GetCounty(); });
+    }
+
+    [Fact]
+    public void GetSequentialNumber_RejectsCall_WhenObjectStateInvalid()
+    {
+        var personalNumericCode = new PersonalNumericCode(CnpWithInvalidSequentialNumber);
+        Assert.Throws<InvalidOperationException>(() => { _ = personalNumericCode.GetSequentialNumber(); });
+    }
+
+    [Theory]
+    [InlineData(ValidCnpStartingWith5, 1)]
+    [InlineData(ValidCnpStartingWith6, 1)]
+    public void GetSequentialNumber_ReturnsCorrectValue(long cnpValue, byte sequentialNumber)
+    {
+        var personalNumericCode = new PersonalNumericCode(cnpValue);
+        var actualSequentialNumber = personalNumericCode.GetSequentialNumber();
+        Assert.Equal(sequentialNumber, actualSequentialNumber);
     }
 }
