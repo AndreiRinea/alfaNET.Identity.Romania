@@ -20,12 +20,16 @@ public class PersonalNumericCodeTest
 {
     private const long Code1 = 1800101420010;
     private const long Code2 = 1810101420019;
+
     private const long ValidCnpStartingWith3 = 3810326400011;
     private const long ValidCnpStartingWith4 = 4770521400018;
     private const long ValidCnpStartingWith5 = 5100521410011;
     private const long ValidCnpStartingWith6 = 6140913420018;
     private const long ValidCnpStartingWith7 = 7800101420011;
     private const long ValidCnpStartingWith8 = 8810101420011;
+
+    private const long CnpWithInvalidDate1 = 1800231420002;
+    private const long CnpWithInvalidDate2 = 5250229420009;
 
     private readonly byte[] _code1ByteArray = [1, 8, 0, 0, 1, 0, 1, 4, 2, 0, 0, 1, 0];
 
@@ -183,7 +187,7 @@ public class PersonalNumericCodeTest
         var errors = cnp.Validate();
         Assert.Equal(ValidationErrors.InvalidMonth, errors);
     }
-    
+
     [Theory]
     [InlineData(1800141420012)]
     [InlineData(1800132420011)]
@@ -217,7 +221,7 @@ public class PersonalNumericCodeTest
     public void Validate_Rejects_InvalidSexDigit(string cnpValue)
     {
         var charArray = cnpValue.ToCharArray();
-        var byteArray = charArray.Select(c=>byte.Parse(c.ToString())).ToArray();
+        var byteArray = charArray.Select(c => byte.Parse(c.ToString())).ToArray();
         var personalNumericCode = new PersonalNumericCode(byteArray);
         var errors = personalNumericCode.Validate();
         Assert.Equal(ValidationErrors.InvalidSexDigit, errors);
@@ -240,12 +244,51 @@ public class PersonalNumericCodeTest
         var errors = cnp.Validate();
         Assert.Equal(ValidationErrors.InvalidDateForCounty, errors);
     }
-    
+
     [Fact]
     public void Validate_Rejects_InvalidDate_EvenWhenBadForCounty()
     {
         var personalNumericCode = new PersonalNumericCode(1800230470014);
         var errors = personalNumericCode.Validate();
         Assert.Equal(ValidationErrors.InvalidDate, errors);
+    }
+
+    [Fact]
+    public void GetSex_RejectsCall_WhenObjectStateInvalid()
+    {
+        var personalNumericCode = new PersonalNumericCode(9800101420010);
+        Assert.Throws<InvalidOperationException>(() => { _ = personalNumericCode.GetSex(); });
+    }
+
+    [Theory]
+    [InlineData(ValidCnpStartingWith3, Sex.Male)]
+    [InlineData(ValidCnpStartingWith4, Sex.Female)]
+    public void GetSex_ReturnsCorrectValue(long cnpValue, Sex expectedSex)
+    {
+        var personalNumericCode = new PersonalNumericCode(cnpValue);
+        var actualSex = personalNumericCode.GetSex();
+        Assert.Equal(expectedSex, actualSex);
+    }
+
+    [Theory]
+    [InlineData(CnpWithInvalidDate1)]
+    [InlineData(CnpWithInvalidDate2)]
+    public void GetDate_RejectsCall_WhenObjectStateInvalid(long cnpValue)
+    {
+        var personalNumericCode = new PersonalNumericCode(cnpValue);
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+            _ = personalNumericCode.GetDate();
+        });
+    }
+
+    [Theory]
+    [InlineData(ValidCnpStartingWith3, "1881-03-26")]
+    [InlineData(ValidCnpStartingWith4, "1877-05-21")]
+    public void GetDate_ReturnsCorrectValue(long cnpValue, DateTime expectedDate)
+    {
+        var personalNumericCode = new PersonalNumericCode(cnpValue);
+        var actualDate = personalNumericCode.GetDate();
+        Assert.Equal(expectedDate, actualDate);
     }
 }
