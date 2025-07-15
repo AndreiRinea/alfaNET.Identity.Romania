@@ -15,6 +15,11 @@
         <Version>1.0.0</Version>
         <Description>A small library for validating and extracting data from Romanian Personal Numeric Codes (CNPs).</Description>
         <PackageTags>CNP;identity;Romania;PNC</PackageTags>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
     </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="README.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>
