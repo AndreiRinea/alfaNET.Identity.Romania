@@ -21,7 +21,7 @@ namespace alfaNET.Identity.Romania.Cnp
     /// <summary>
     /// A Personal Numeric Code (CNP) class that enables validation and data extraction
     /// </summary>
-    public class PersonalNumericCode : IEquatable<PersonalNumericCode>
+    public class PersonalNumericCode : IEquatable<PersonalNumericCode>, IComparable<PersonalNumericCode>
     {
         private struct PossibleDate
         {
@@ -368,6 +368,36 @@ namespace alfaNET.Identity.Romania.Cnp
         }
 
         /// <inheritdoc />
+        public int CompareTo(PersonalNumericCode other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+            
+            var thisDate = GetDate();
+            var otherDate = other.GetDate();
+            var dateDiff = DateTime.Compare(thisDate, otherDate);
+            if (dateDiff != 0)
+            {
+                return dateDiff;
+            }
+            
+            var thisSn = GetSequentialNumber();
+            var otherSn = other.GetSequentialNumber();
+            var snDiff = thisSn.CompareTo(otherSn);
+            if (snDiff != 0)
+            {
+                return snDiff;
+            }
+
+            var thisCc = GetCountyCode();
+            var otherCc = other.GetCountyCode();
+            var ccDiff = thisCc.CompareTo(otherCc);
+            return ccDiff != 0 ? ccDiff : 0;
+        }
+
+        /// <inheritdoc />
         public override bool Equals(object obj)
         {
             return Equals(obj as PersonalNumericCode);
@@ -382,7 +412,7 @@ namespace alfaNET.Identity.Romania.Cnp
         }
 
         public static bool operator ==(PersonalNumericCode left, PersonalNumericCode right) => Equals(left, right);
-
+        
         public static bool operator !=(PersonalNumericCode left, PersonalNumericCode right) => !Equals(left, right);
     }
 }

@@ -19,6 +19,8 @@ namespace alfaNET.Identity.Romania.Tests.Cnp;
 public class PersonalNumericCodeTest
 {
     private const long Code1 = 1800101420010;
+    private const long Code1SameCountyHigherSn = 1800101420071;
+    private const long Code1SameSnHigherCc = 1800101440015;
     private const long Code2 = 1810101420019;
 
     private const long ValidCnpStartingWith3 = 3810326400011;
@@ -326,5 +328,78 @@ public class PersonalNumericCodeTest
         var personalNumericCode = new PersonalNumericCode(cnpValue);
         var actualSequentialNumber = personalNumericCode.GetSequentialNumber();
         Assert.Equal(sequentialNumber, actualSequentialNumber);
+    }
+
+    [Fact]
+    public void CompareTo_ReturnsLarger_ForNull()
+    {
+        var result = _validCode1.CompareTo(null);
+        Assert.True(result > 0);
+    }
+
+    [Fact]
+    public void CompareTo_ReturnsEqual_ForSameInstance()
+    {
+        var result = _validCode1.CompareTo(_validCode1);
+        Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void CompareTo_ReturnsEqual_ForDifferentEqualInstance()
+    {
+        var instance1 = new PersonalNumericCode(Code1);
+        var instance2 = new PersonalNumericCode(Code1);
+        var result = instance1.CompareTo(instance2);
+        Assert.Equal(0, result);
+    }
+
+    [Fact]
+    public void CompareTo_ReturnsLarger_ForNewerDate()
+    {
+        var result = _validCode2.CompareTo(_validCode1);
+        Assert.True(result > 0);
+    }
+
+    [Fact]
+    public void CompareTo_ReturnsSmaller_ForOlderDate()
+    {
+        var result = _validCode1.CompareTo(_validCode2);
+        Assert.True(result < 0);
+    }
+
+    [Fact]
+    public void CompareTo_ReturnsLarger_ForEqualDates_ButLargerSn()
+    {
+        var instance1 = new PersonalNumericCode(Code1SameCountyHigherSn);
+        var instance2 = new PersonalNumericCode(Code1);
+        var result = instance1.CompareTo(instance2);
+        Assert.True(result > 0);
+    }
+    
+    [Fact]
+    public void CompareTo_ReturnsSmaller_ForEqualDates_ButSmallerSn()
+    {
+        var instance1 = new PersonalNumericCode(Code1);
+        var instance2 = new PersonalNumericCode(Code1SameCountyHigherSn);
+        var result = instance1.CompareTo(instance2);
+        Assert.True(result < 0);
+    }
+    
+    [Fact]
+    public void CompareTo_ReturnsLarger_ForEqualDatesAndSn_ButLargerCc()
+    {
+        var instance1 = new PersonalNumericCode(Code1SameSnHigherCc);
+        var instance2 = new PersonalNumericCode(Code1);
+        var result = instance1.CompareTo(instance2);
+        Assert.True(result > 0);
+    }
+    
+    [Fact]
+    public void CompareTo_ReturnsSmaller_ForEqualDatesAndSn_ButSmallerCc()
+    {
+        var instance1 = new PersonalNumericCode(Code1);
+        var instance2 = new PersonalNumericCode(Code1SameSnHigherCc);
+        var result = instance1.CompareTo(instance2);
+        Assert.True(result < 0);
     }
 }
