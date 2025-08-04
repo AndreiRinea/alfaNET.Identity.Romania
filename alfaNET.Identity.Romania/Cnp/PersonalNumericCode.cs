@@ -15,12 +15,15 @@
 using System;
 using System.Linq;
 using System.Text;
+using alfaNET.Identity.Romania.Cnp.Serialization;
+using Newtonsoft.Json;
 
 namespace alfaNET.Identity.Romania.Cnp
 {
     /// <summary>
     /// A Personal Numeric Code (CNP) class that enables validation and data extraction
     /// </summary>
+    [JsonConverter(typeof(PersonalNumericCodeJsonConverter))]
     public class PersonalNumericCode : IEquatable<PersonalNumericCode>, IComparable<PersonalNumericCode>
     {
         private struct PossibleDate

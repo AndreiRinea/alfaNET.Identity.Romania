@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using alfaNET.Identity.Romania.Cnp;
+using Newtonsoft.Json;
 
 namespace alfaNET.Identity.Romania.Tests.Cnp;
 
@@ -375,7 +376,7 @@ public class PersonalNumericCodeTest
         var result = instance1.CompareTo(instance2);
         Assert.True(result > 0);
     }
-    
+
     [Fact]
     public void CompareTo_ReturnsSmaller_ForEqualDates_ButSmallerSn()
     {
@@ -384,7 +385,7 @@ public class PersonalNumericCodeTest
         var result = instance1.CompareTo(instance2);
         Assert.True(result < 0);
     }
-    
+
     [Fact]
     public void CompareTo_ReturnsLarger_ForEqualDatesAndSn_ButLargerCc()
     {
@@ -393,7 +394,7 @@ public class PersonalNumericCodeTest
         var result = instance1.CompareTo(instance2);
         Assert.True(result > 0);
     }
-    
+
     [Fact]
     public void CompareTo_ReturnsSmaller_ForEqualDatesAndSn_ButSmallerCc()
     {
@@ -401,5 +402,34 @@ public class PersonalNumericCodeTest
         var instance2 = new PersonalNumericCode(Code1SameSnHigherCc);
         var result = instance1.CompareTo(instance2);
         Assert.True(result < 0);
+    }
+
+    private class Person
+    {
+        public const string SampleName = "Ion Popescu";
+        public const string SampleJsonString = "{\"FullName\":\"Ion Popescu\",\"Cnp\":1800101420010}";
+        public string? FullName { get; set; }
+        public PersonalNumericCode? Cnp { get; set; }
+    }
+
+    [Fact]
+    public void JsonConvert_SerializesCorrectly()
+    {
+        var person = new Person
+        {
+            FullName = Person.SampleName,
+            Cnp = _validCode1
+        };
+        var jsonString = JsonConvert.SerializeObject(person, Formatting.None);
+        var expectedJson = Person.SampleJsonString;
+        Assert.Equal(expectedJson, jsonString);
+    }
+
+    [Fact]
+    public void JsonConvert_DeserializesCorrectly()
+    {
+        var person = JsonConvert.DeserializeObject<Person>(Person.SampleJsonString);
+        Assert.NotNull(person);
+        Assert.Equal(_validCode1, person.Cnp);
     }
 }
