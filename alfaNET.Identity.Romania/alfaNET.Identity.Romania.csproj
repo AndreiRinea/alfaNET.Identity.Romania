@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <PackageId>alfaNET.Identity.Romania</PackageId>
         <Copyright>Andrei Rinea</Copyright>
-        <AssemblyVersion>1.0.1</AssemblyVersion>
+        <AssemblyVersion>1.1.0</AssemblyVersion>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -13,7 +13,7 @@
         <RepositoryUrl>https://github.com/AndreiRinea/alfaNET.Identity.Romania.git</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <Authors>Andrei Rinea</Authors>
-        <Version>1.0.1</Version>
+        <Version>1.1.0</Version>
         <Description>A small library for validating and extracting data from Romanian Personal Numeric Codes (CNPs).</Description>
         <PackageTags>CNP;identity;Romania;PNC</PackageTags>
         <PackageReadmeFile>README.md</PackageReadmeFile>
